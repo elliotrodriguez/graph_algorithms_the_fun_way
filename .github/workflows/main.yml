@@ -1,0 +1,37 @@
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches:
+      - main  # Trigger workflow on pushes to the main branch
+  pull_request:
+    branches:
+      - main  # Trigger workflow on pull requests to the main branch
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Log in to Amazon ECR
+      - name: Log in to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      # Step 3: Build the Docker image
+      - name: Build Docker image
+        run: |
+          docker build -t my-app:latest .
+          docker tag my-app:latest <AWS_ACCOUNT_ID>.dkr.ecr.<AWS_REGION>.amazonaws.com/my-app:latest
+
+      # Step 4: Push the Docker image to ECR
+      - name: Push Docker image to ECR
+        run: |
+          docker push <AWS_ACCOUNT_ID>.dkr.ecr.<AWS_REGION>.amazonaws.com/my-app:latest
+
+      # Step 5: Optional - Notify Success
+      - name: Notify Success
+        run: echo "Docker image pushed to ECR successfully!"

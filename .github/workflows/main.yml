@@ -1,4 +1,4 @@
-name: Build and Push Docker Image
+name: Build and deploy to ECR
 
 on:
   push:
@@ -24,13 +24,13 @@ jobs:
       # Step 3: Build the Docker image
       - name: Build Docker image
         run: |
-          docker build -t my-app:latest .
-          docker tag my-app:latest <AWS_ACCOUNT_ID>.dkr.ecr.<AWS_REGION>.amazonaws.com/my-app:latest
+          docker build -t graph-algorithms-the-fun-way:latest .
+          docker tag my-app:latest <AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/graph-algorithms-the-fun-way:latest
 
       # Step 4: Push the Docker image to ECR
       - name: Push Docker image to ECR
         run: |
-          docker push <AWS_ACCOUNT_ID>.dkr.ecr.<AWS_REGION>.amazonaws.com/my-app:latest
+          docker push <AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/graph-algorithms-the-fun-way:latest
 
       # Step 5: Optional - Notify Success
       - name: Notify Success

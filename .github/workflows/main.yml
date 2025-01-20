@@ -30,7 +30,7 @@ jobs:
       - name: Build Docker image
         run: |
           docker build -t graph-algorithms-the-fun-way:latest .
-          docker tag my-app:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/graph-algorithms-the-fun-way:latest
+          docker tag graph-algorithms-the-fun-way:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/graph-algorithms-the-fun-way:latest
 
       # Step 4: Push the Docker image to ECR
       - name: Push Docker image to ECR

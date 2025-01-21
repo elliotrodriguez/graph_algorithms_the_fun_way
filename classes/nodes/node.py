@@ -1,4 +1,4 @@
-from graph.edges import Edge
+from classes.edges import Edge
 from typing import Union
 
 class Node:
@@ -21,7 +21,7 @@ class Node:
         """
         return len(self.edges)
 
-    def get_edges(self, neighbor: int) -> Union[Edge, None]:
+    def get_edge(self, neighbor: int) -> Union[Edge, None]:
         """
         Retrieve the edge connecting this node to a specified neighbor.
 

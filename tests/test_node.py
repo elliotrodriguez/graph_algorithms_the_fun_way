@@ -1,6 +1,6 @@
 import unittest
-from graph.nodes.nodes import Node
-from graph.edges.edge import Edge
+from classes.nodes.node import Node
+from classes.edges.edge import Edge
 
 class TestNode(unittest.TestCase):
     
@@ -18,7 +18,7 @@ class TestNode(unittest.TestCase):
         node.add_edge(neighbor=2, weight=3.5)
         
         # Test if the edge is added correctly
-        edge = node.get_edges(2)
+        edge = node.get_edge(2)
         self.assertIsNotNone(edge)
         self.assertEqual(edge.from_node, 1)
         self.assertEqual(edge.to_node, 2)
@@ -30,7 +30,7 @@ class TestNode(unittest.TestCase):
         node.remove_edge(neighbor=2)
         
         # Test if the edge is removed correctly
-        self.assertIsNone(node.get_edges(2))
+        self.assertIsNone(node.get_edge(2))
         self.assertEqual(node.num_edges(), 0)
 
     def test_get_edge_list(self):

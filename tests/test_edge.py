@@ -1,5 +1,5 @@
 import unittest
-from graph.edges.edge import Edge
+from classes.edges.edge import Edge
 
 class TestEdge(unittest.TestCase):
     

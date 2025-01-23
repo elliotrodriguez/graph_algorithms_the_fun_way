@@ -1,42 +1,37 @@
-name: Build and deploy to ECR
+name: Python CI
 
 on:
   push:
-    branches:
-      - main  # Trigger workflow on pushes to the main branch
+    branches: [ main ]
   pull_request:
-    branches:
-      - main  # Trigger workflow on pull requests to the main branch
+    branches: [ main ]
 
 jobs:
-  build-and-push:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Check out the repository
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-      # Step 2: Log in to Amazon ECR
-      - name: Log in to Amazon ECR
-        uses: aws-actions/amazon-ecr-login@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      # Step 3: Build the Docker image
-      - name: Build Docker image
-        run: |
-          docker build -t graph-algorithms-the-fun-way:latest .
-          docker tag graph-algorithms-the-fun-way:latest 815185787185.dkr.ecr.us-east-1.amazonaws.com/graph-algorithms-the-fun-way:latest
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.11'
 
-      # Step 4: Push the Docker image to ECR
-      - name: Push Docker image to ECR
-        run: |
-          docker push 815185787185.dkr.ecr.us-east-1.amazonaws.com/graph-algorithms-the-fun-way:latest
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pytest pytest-cov
 
-      # Step 5: Optional - Notify Success
-      - name: Notify Success
-        run: echo "Docker image pushed to ECR successfully!"
+    - name: Run tests with coverage
+      run: |
+        pytest --cov=classes --cov-report=term-missing tests/
+
+    - name: Upload coverage report
+      if: success()
+      uses: actions/upload-artifact@v2
+      with:
+        name: coverage-report
+        path: htmlcov/
